@@ -8,7 +8,6 @@
     if($total_chamadas == 0){
 	$res_insert = $pdo->query("INSERT into chamadas (id, paciente, consultorio, status) values ('1', 'Sem Paciente', '0', 'Aguardando')");
     }
-
     //VERIFICAR SE EXISTE REGISTRO NA TABELA USUARIOS E SE NÃO EXISTIR CRIAR
     $senha = '123';
     $senha_cript = md5($senha);
@@ -19,7 +18,6 @@
 	$res_insert = $pdo->query("INSERT into usuarios (nome, usuario, senha, senha_original, nivel) values ('Administrador', '$email_adm', '$senha_cript', '$senha', 'admin')");
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -63,83 +61,59 @@
 </body>
 </html>
 
-
-
-
 <div class="modal fade" id="modal-senha" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title text-dark">Recuperar Senha</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<form method="post">
-				<div class="modal-body">
-					<div class="form-group">
-						<label class="text-dark" for="exampleInputEmail1">Seu Email</label>
-						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="txtEmail">
-
-					</div>
-
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-					<button name="recuperar-senha" type="submit" class="btn btn-primary">Recuperar</button>
-				</div>
-			</form>
+    <div class="modal-dialog" role="document">
+	<div class="modal-content">
+            <div class="modal-header">
+		<h5 class="modal-title text-dark">Recuperar Senha</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+		</button>
+            </div>
+            <form method="post">
+		<div class="modal-body">
+                    <div class="form-group">
+                        <label class="text-dark" for="exampleInputEmail1">Seu Email</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="txtEmail">
+                    </div>
 		</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button name="recuperar-senha" type="submit" class="btn btn-primary">Recuperar</button>
+                </div>
+            </form>
 	</div>
+    </div>
 </div>
-
-
-
 <?php 
-if(isset($_POST['recuperar-senha'])){
+    if(isset($_POST['recuperar-senha'])){
 	$email_usuario = $_POST['txtEmail'];
-
 	$res = $pdo->prepare("SELECT * from usuarios where usuario = :usuario");
-
 	$res->bindValue(":usuario", $email_usuario);
 	$res->execute();
-
 	$dados = $res->fetchAll(PDO::FETCH_ASSOC);
 	$linhas = count($dados);
-
 	if($linhas > 0){
-		$nome_usu = $dados[0]['nome'];
-		$senha_usu = $dados[0]['senha_original'];
-		$nivel_usu = $dados[0]['nivel'];
-
+            $nome_usu = $dados[0]['nome'];
+            $senha_usu = $dados[0]['senha_original'];
+            $nivel_usu = $dados[0]['nivel'];
 	}else{
-		echo "<script language='javascript'>window.alert('Este email não está cadastrado no sistema!'); </script>";
+            echo "<script language='javascript'>window.alert('Este email não está cadastrado no sistema!'); </script>";
 	}
-
-
 	//AQUI VAI O CÓDIGO DE ENVIO DO EMAIL
 	$to = $email_usuario;
 	$subject = 'Recuperação de Senha SysMedical';
-
 	$message = "
-
 	Olá $nome_usu!! 
 	<br><br> Sua senha é <b>$senha_usu </b>
-
 	<br><br> Ir Para o Sistema -> <a href='$url_sistema'  target='_blank'> Clique Aqui </a>
-
 	";
-
 	$remetente = $email_adm;
 	$headers = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=utf-8;' . "\r\n";
 	$headers .= "From: " .$remetente;
 	mail($to, $subject, $message, $headers);
-
-	
-
 	echo "<script language='javascript'>window.alert('Sua senha foi enviada no seu email, verifique no spam ou lixo eletrônico!!'); </script>";
-
 	echo "<script language='javascript'>window.location='index.php'; </script>";
 }
 ?>

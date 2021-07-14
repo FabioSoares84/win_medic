@@ -113,7 +113,7 @@ if($total > 0){
 <div class="float-right text-success totalpago">Total: R$ '.$total.',00</div>';
 }else{
 	echo '
-<div class="float-right text-danger totalpago">Total: R$ '.$total.',00</div>';
+<div class="float-right text-danger totalpago">Total: R$ 00,00</div>';
 }
 
 

@@ -46,7 +46,7 @@ if($linhas > 0){
 		exit();
 	}
 }else{
-	echo "<script language='javascript'>window.alert('Dados Incorretos!!'); </script>";
+	echo "<script language='javascript'>alert('Dados Incorretos!!'); </script>";
 	echo "<script language='javascript'>window.location='index.php'; </script>";
 }
  ?>
