@@ -141,6 +141,7 @@ if(isset($_POST['recuperar-senha'])){
 	echo "<script language='javascript'>window.alert('Sua senha foi enviada no seu email, verifique no spam ou lixo eletrônico!!'); </script>";
 
 	echo "<script language='javascript'>window.location='index.php'; </script>";
+        echo 'aqui';
 
 
 }
