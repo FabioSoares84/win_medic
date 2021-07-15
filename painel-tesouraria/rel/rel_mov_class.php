@@ -5,7 +5,7 @@ include('../../conexao.php');
 date_default_timezone_set('America/Sao_Paulo');
 
 //CARREGAR DOMPDF
-require_once '../../dompdf/autoload.inc.php';
+require_once '../dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 
 $dataInicial = $_POST['dataInicialPost'];

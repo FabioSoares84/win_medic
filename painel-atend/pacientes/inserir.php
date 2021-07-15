@@ -27,9 +27,10 @@ if($data_nascimento != ''){
     $idade = 0;
 }
 //VERIFICAR SE O PACIENTE JÁ ESTÁ CADASTRADO
-$res_c = $pdo->query("select * from pacientes where cpf = '$cpf' AND nome = '$nome'");
+$res_c = $pdo->query("select * from pacientes where cpf = '$cpf' OR nome = '$nome'");
 $dados_c = $res_c->fetchAll(PDO::FETCH_ASSOC);
 $linhas = count($dados_c);
+var_dump($linhas);
 if($nome == ''){
     echo "Preencha o Nome!!";
     exit();
