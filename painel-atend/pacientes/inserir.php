@@ -10,6 +10,8 @@
     $sexo            = $_POST['sexo'];
     $endereco        = $_POST['endereco'];
     $obs             = $_POST['obs'];
+    
+    $cpfSemPonto = preg_replace("/\D+/", "", $cpf);
 
 //CALCULAR A IDADE COM BASE NA DATA SELECIONADA
 if($data_nascimento != ''){
@@ -24,22 +26,22 @@ if($data_nascimento != ''){
 }else{
     $idade = 0;
 }
-//VERIFICAR SE O MÉDICO JÁ ESTÁ CADASTRADO
-$res_c = $pdo->query("select * from pacientes where cpf = '$cpf'");
+//VERIFICAR SE O PACIENTE JÁ ESTÁ CADASTRADO
+$res_c = $pdo->query("select * from pacientes where cpf = '$cpf' AND nome = '$nome'");
 $dados_c = $res_c->fetchAll(PDO::FETCH_ASSOC);
 $linhas = count($dados_c);
 if($nome == ''){
     echo "Preencha o Nome!!";
     exit();
 }
-if($cpf == ''){
+if($cpf == '' || strlen($cpf) < 11){
     echo "Preencha o CPF!!";
     exit();
 }
 if($linhas == 0){
 	$res = $pdo->prepare("INSERT into pacientes (nome, cpf, rg, telefone, email, data_nasc, idade, civil, sexo, endereco, obs) values (:nome, :cpf, :rg, :telefone, :email, :data_nasc, :idade, :civil, :sexo, :endereco, :obs)");
 	$res->bindValue(":nome", $nome);
-	$res->bindValue(":cpf", $cpf);
+	$res->bindValue(":cpf", $cpfSemPonto);
 	$res->bindValue(":telefone", $telefone);
 	$res->bindValue(":rg", $rg);
 	$res->bindValue(":email", $email);
