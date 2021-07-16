@@ -1,46 +1,44 @@
 <?php $pagina = 'usuarios'; ?>
-<div class="row botao-novo">
-    <div class="col-md-12">
-        <a id="btn-novo" data-toggle="modal" data-target="#modal"></a>
-        <a href="index.php?acao=<?php echo $pagina ?>&funcao=novo"  type="button" class="btn btn-secondary">Novo Usuário</a>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-md-6 col-sm-12">
-	<form method="post">
-            <div class="float-left">
-		<select onChange="submit();" class="form-control-sm" id="exampleFormControlSelect1" name="itens-pagina">
-                    <?php 
-                        if(isset($_POST['itens-pagina'])){
-                                $item_paginado = $_POST['itens-pagina'];
-                        }elseif(isset($_GET['itens'])){
-                                $item_paginado = $_GET['itens'];
-                        }
-                     ?>
-                    <option value="<?php echo @$item_paginado ?>"><?php echo @$item_paginado ?> Registros</option>
-				   <?php if(@$item_paginado != $opcao1){ ?> 
-                    <option value="<?php echo $opcao1 ?>"><?php echo $opcao1 ?> Registros</option>
-                                   <?php } ?>
-				   <?php if(@$item_paginado != $opcao2){ ?> 
-                    <option value="<?php echo $opcao2 ?>"><?php echo $opcao2 ?> Registros</option>
-				   <?php } ?>
-				   <?php if(@$item_paginado != $opcao3){ ?> 
-                    <option value="<?php echo $opcao3 ?>"><?php echo $opcao3 ?> Registros</option>
-                                   <?php } ?>
-		</select>
-            </div>
-	</form>
-    </div>
-    <div class="col-md-6 col-sm-12">
-        <div class="float-right mr-4">
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Buscar Nome" aria-label="Search" name="txtbuscar">
-                <button class="btn btn-outline-secondary btn-sm my-2 my-sm-0" type="submit" name="<?php echo $pagina; ?>"><i class="fas fa-search"></i></button>
-            </form>
+    <div class="row botao-novo">
+        <div class="col-md-12">
+            <a id="btn-novo" data-toggle="modal" data-target="#modal"></a>
+            <a href="index.php?acao=<?php echo $pagina ?>&funcao=novo"  type="button" class="btn btn-secondary">Novo Usuário</a>
         </div>
     </div>
-</div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 col-sm-12">
+            <form method="post">
+                <div class="float-left">
+                    <select onChange="submit();" class="form-control-sm" id="exampleFormControlSelect1" name="itens-pagina">
+                        <?php 
+                            if(isset($_POST['itens-pagina'])){
+                                $item_paginado = $_POST['itens-pagina'];
+                            }elseif(isset($_GET['itens'])){
+                                $item_paginado = $_GET['itens'];
+                            }
+                         ?>
+                        <option value="<?php echo @$item_paginado ?>">
+                                       <?php echo @$item_paginado ?> Registros</option>
+                                       <?php if(@$item_paginado != $opcao1){ ?> 
+                        <option value="<?php echo $opcao1 ?>"><?php echo $opcao1 ?> Registros</option> <?php } ?>
+                                       <?php if(@$item_paginado != $opcao2){ ?> 
+                        <option value="<?php echo $opcao2 ?>"><?php echo $opcao2 ?> Registros</option> <?php } ?>
+                                       <?php if(@$item_paginado != $opcao3){ ?> 
+                        <option value="<?php echo $opcao3 ?>"><?php echo $opcao3 ?> Registros</option> <?php } ?>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="float-right mr-4">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Buscar Nome" aria-label="Search" name="txtbuscar">
+                    <button class="btn btn-outline-secondary btn-sm my-2 my-sm-0" type="submit" name="<?php echo $pagina; ?>"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 <table class="table table-sm mt-3">
 	<thead class="thead-light">
@@ -54,64 +52,53 @@
 	</thead>
 	<tbody>
 
-		<?php
+<?php
+    //DEFINIR O NUMERO DE ITENS POR PÁGINA
+    if(isset($_POST['itens-pagina'])){
+        $itens_por_pagina = $_POST['itens-pagina'];
+        @$_GET['pagina'] = 0;
+    }elseif(isset($_GET['itens'])){
+        $itens_por_pagina = $_GET['itens'];
+    }
+    else{
+        $itens_por_pagina = $opcao1;
+    }
 
-		//DEFINIR O NUMERO DE ITENS POR PÁGINA
-		if(isset($_POST['itens-pagina'])){
-			$itens_por_pagina = $_POST['itens-pagina'];
-			@$_GET['pagina'] = 0;
-		}elseif(isset($_GET['itens'])){
-			$itens_por_pagina = $_GET['itens'];
-		}
-		else{
-			$itens_por_pagina = $opcao1;
+    //PEGAR A PÁGINA ATUAL
+    $pagina_pag = intval(@$_GET['pagina']);
+    $limite = $pagina_pag * $itens_por_pagina;
+    
+    //CAMINHO DA PAGINAÇÃO
+    $caminho_pag = 'index.php?acao='.$pagina.'&';
+    if(isset($_GET[$item4]) and $_GET['txtbuscar'] != ''){
+        $nome_buscar = '%'.$_GET['txtbuscar'].'%';
+        $res = $pdo->prepare("SELECT * from usuarios where nome LIKE :nome order by nome asc");
+        $res->bindValue(":nome", $nome_buscar);
+        $res->execute();
+    }else{
+        $res = $pdo->query("SELECT * from usuarios order by id desc LIMIT $limite, $itens_por_pagina");
+    }
+    $dados = $res->fetchAll(PDO::FETCH_ASSOC);
 
-		}
+    //TOTALIZAR OS REGISTROS PARA PAGINAÇÃO
+    $res_todos = $pdo->query("SELECT * from usuarios");
+    $dados_total = $res_todos->fetchAll(PDO::FETCH_ASSOC);
+    $num_total = count($dados_total);
 
-		//PEGAR A PÁGINA ATUAL
-		$pagina_pag = intval(@$_GET['pagina']);
-		$limite = $pagina_pag * $itens_por_pagina;
-		//CAMINHO DA PAGINAÇÃO
-		$caminho_pag = 'index.php?acao='.$pagina.'&';
-		if(isset($_GET[$item4]) and $_GET['txtbuscar'] != ''){
-			$nome_buscar = '%'.$_GET['txtbuscar'].'%';
-			$res = $pdo->prepare("SELECT * from usuarios where nome LIKE :nome order by nome asc");
-			$res->bindValue(":nome", $nome_buscar);
-			$res->execute();
-		}else{
-			$res = $pdo->query("SELECT * from usuarios order by id desc LIMIT $limite, $itens_por_pagina");
-		}
+    //DEFINIR O TOTAL DE PAGINAS
+    $num_paginas = ceil($num_total/$itens_por_pagina);
 
-		
-		
-		$dados = $res->fetchAll(PDO::FETCH_ASSOC);
-
-		//TOTALIZAR OS REGISTROS PARA PAGINAÇÃO
-		$res_todos = $pdo->query("SELECT * from usuarios");
-		$dados_total = $res_todos->fetchAll(PDO::FETCH_ASSOC);
-		$num_total = count($dados_total);
-
-		//DEFINIR O TOTAL DE PAGINAS
-		$num_paginas = ceil($num_total/$itens_por_pagina);
-
-
-
-		for ($i=0; $i < count($dados); $i++) { 
-			foreach ($dados[$i] as $key => $value) {
-			}
-
-			$id = $dados[$i]['id'];	
-			$nome = $dados[$i]['nome'];
-			$usuario = $dados[$i]['usuario'];
-			$senha = $dados[$i]['senha'];
-			$senha_original = $dados[$i]['senha_original'];
-			$nivel = $dados[$i]['nivel'];
-
-
-
-			$linhas = count($dados);
-
-			?>
+    for ($i=0; $i < count($dados); $i++) { 
+        foreach ($dados[$i] as $key => $value) {
+        }
+        $id = $dados[$i]['id'];	
+        $nome = $dados[$i]['nome'];
+        $usuario = $dados[$i]['usuario'];
+        $senha = $dados[$i]['senha'];
+        $senha_original = $dados[$i]['senha_original'];
+        $nivel = $dados[$i]['nivel'];
+        $linhas = count($dados);
+?>
 
 			<tr>
 
@@ -133,8 +120,9 @@
 
 
 <?php 
-//MOSTRAR A PÁGINAÇÃO SÓ SE NÃO HOUVER BUSCA
-if(!isset($_GET[$pagina])){ ?>
+    //MOSTRAR A PÁGINAÇÃO SÓ SE NÃO HOUVER BUSCA
+    if(!isset($_GET[$pagina])){ 
+?>
 
 <!--ÁREA DA PÁGINAÇÃO -->
 <nav class="paginacao" aria-label="Page navigation example">

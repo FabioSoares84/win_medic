@@ -213,7 +213,7 @@
 							}
 						 ?>
 
-						 	<?php if($turno != 'Manhã') echo '<option value="Manhã">Manhã</option>'; ?>
+						 	<?php if($turno != 'Manhã') echo '<option value="Manha">Manhã</option>'; ?>
 
 						 	<?php if($turno != 'Tarde') echo '<option value="Tarde">Tarde</option>'; ?>
 

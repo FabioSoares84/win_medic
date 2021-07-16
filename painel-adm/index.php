@@ -5,52 +5,48 @@ require_once("../config.php");
 require_once("consultas-notificacoes.php");
 @session_start();
 if(!isset($_SESSION['nome_usuario']) || $_SESSION['nivel_usuario'] != 'admin'){
-	header("location:../index.php");
+    header("location:../index.php");
 }
-$notificacoes = 3;
+$notificacoes = 0;
 //VARIÁVEIS DOS MENUS
-$item1 = 'home';
-$item2 = 'medicos';
-$item3 = 'funcionarios';
-$item4 = 'usuarios';
-$item5 = 'espec';
-$item6 = 'recepcionistas';
-$item7 = 'atendimentos';
-$item8 = 'tesoureiros';
-$item9 = 'cargos';
+$item1  = 'home';
+$item2  = 'medicos';
+$item3  = 'funcionarios';
+$item4  = 'usuarios';
+$item5  = 'espec';
+$item6  = 'recepcionistas';
+$item7  = 'atendimentos';
+$item8  = 'tesoureiros';
+$item9  = 'cargos';
 $item10 = 'backup';
 $item11 = 'notificacoes';
-
 //VERIFICAR QUAL O MENU CLICADO E PASSAR A CLASSE ATIVO
 if(@$_GET['acao'] == $item1){
-	$item1ativo = 'active';
+    $item1ativo = 'active';
 }elseif(@$_GET['acao'] == $item2 or isset($_GET[$item2])){
-	$item2ativo = 'active';
+    $item2ativo = 'active';
 }elseif(@$_GET['acao'] == $item3){
-	$item3ativo = 'active';
+    $item3ativo = 'active';
 }elseif(@$_GET['acao'] == $item4 or isset($_GET[$item4])){
-	$item4ativo = 'active';
+    $item4ativo = 'active';
 }elseif(@$_GET['acao'] == $item5){
-	$item5ativo = 'active';
+    $item5ativo = 'active';
 }elseif(@$_GET['acao'] == $item6){
-	$item6ativo = 'active';
+    $item6ativo = 'active';
 }elseif(@$_GET['acao'] == $item7){
-	$item7ativo = 'active';
+    $item7ativo = 'active';
 }elseif(@$_GET['acao'] == $item8){
-	$item8ativo = 'active';
+    $item8ativo = 'active';
 }elseif(@$_GET['acao'] == $item9){
-	$item9ativo = 'active';
+    $item9ativo = 'active';
 }elseif(@$_GET['acao'] == $item10){
-	$item10ativo = 'active';
+    $item10ativo = 'active';
 }elseif(@$_GET['acao'] == $item11){
-	$item11ativo = 'active';
+    $item11ativo = 'active';
 }else{
-	$item1ativo = 'active';
+    $item1ativo = 'active';
 }
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -86,18 +82,18 @@ if(@$_GET['acao'] == $item1){
             <div class="row">
 		<div class="col-md-3 col-sm-12 mb-4">
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <a class="nav-link <?php echo @$item1ativo ?>" id="v-pills-home-tab" href="index.php?acao=<?php echo $item1 ?>" role="tab" aria-controls="v-pills-home" aria-selected="true"><i class="fas fa-home mr-1"></i>Home</a>
-                        <a class="nav-link <?php echo @$item2ativo ?>"  id="link-medicos"  href="index.php?acao=<?php echo $item2 ?>" role="tab" aria-controls="v-pills-profile"  aria-selected="false"><i class="fas fa-user-md mr-1"></i>Cadastro de Médicos</a>
+                        <a class="nav-link <?php echo @$item1ativo ?>" id="v-pills-home-tab"      href="index.php?acao=<?php echo $item1 ?>" role="tab" aria-controls="v-pills-home" aria-selected="true"><i class="fas fa-home mr-1"></i>Home</a>
+                        <a class="nav-link <?php echo @$item2ativo ?>" id="link-medicos"          href="index.php?acao=<?php echo $item2 ?>" role="tab" aria-controls="v-pills-profile"  aria-selected="false"><i class="fas fa-user-md mr-1"></i>Cadastro de Médicos</a>
                         <a class="nav-link <?php echo @$item3ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item3 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Funcionários</a>
                         <a class="nav-link <?php echo @$item4ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item4 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Usuários</a>
 			<a class="nav-link <?php echo @$item5ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item5 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Especializações</a>
-			<a class="nav-link <?php echo $item6ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item6 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Recepcionistas</a>
-			<a class="nav-link <?php echo $item7ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item7 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Atendimentos</a>
-			<a class="nav-link <?php echo $item8ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item8 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Tesoureiros</a>
-			<a class="nav-link <?php echo $item9ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item9 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Cargos</a>
+			<a class="nav-link <?php echo $item6ativo ?>"  id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item6 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Recepcionistas</a>
+			<a class="nav-link <?php echo $item7ativo ?>"  id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item7 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Atendimentos</a>
+			<a class="nav-link <?php echo $item8ativo ?>"  id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item8 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Tesoureiros</a>
+			<a class="nav-link <?php echo $item9ativo ?>"  id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item9 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Cadastro de Cargos</a>
 			<a class="nav-link <?php echo $item10ativo ?>" id="v-pills-messages-tab"  href="backup.php?acao=<?php echo $item10 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Backup do Banco</a>
-                        <?php 	if($notificacoes > 0){ ?>
-                            <a class="nav-link <?php echo $item11ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item11 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Notificações do Sistema <span class="badge badge-secondary"><?php echo $total_notificacoes ?></span></a>
+                        <?php 	if($notificacoes > 0){ ?> 
+                          <a class="nav-link <?php echo $item11ativo ?>" id="v-pills-messages-tab"  href="index.php?acao=<?php echo $item11 ?>" role="tab" aria-controls="v-pills-messages" aria-selected="false"><i class="far fa-user mr-1"></i>Notificações do Sistema <span class="badge badge-secondary"><?php echo $total_notificacoes ?></span></a>
                         <?php 	} ?>
 		    </div>
 			</div>

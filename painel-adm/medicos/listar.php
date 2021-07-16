@@ -1,102 +1,75 @@
 <?php 
-
 require_once("../../conexao.php");
 $pagina = 'medicos';
-
 $txtbuscar = @$_POST['txtbuscar'];
-
-
 echo '
-<table class="table table-sm mt-3 tabelas">
+    <table class="table table-sm mt-3 tabelas">
 	<thead class="thead-light">
-		<tr>
-			<th scope="col">Nome</th>
-			<th scope="col">Especialidade</th>
-			<th scope="col">CRM</th>
-			<th scope="col">CPF</th>
-			<th scope="col">Telefone</th>
-			<th scope="col">Turno</th>
-			<th scope="col">Ações</th>
-		</tr>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Especialidade</th>
+                <th scope="col">CRM</th>
+                <th scope="col">CPF</th>
+                <th scope="col">Telefone</th>
+                <th scope="col">Turno</th>
+                <th scope="col">Ações</th>
+            </tr>
 	</thead>
 	<tbody>';
-
-	
-	    $itens_por_pagina = $_POST['itens'];
-
-	//PEGAR A PÁGINA ATUAL
-		$pagina_pag = intval(@$_POST['pag']);
-		
-		$limite = $pagina_pag * $itens_por_pagina;
-
-		//CAMINHO DA PAGINAÇÃO
-		$caminho_pag = 'index.php?acao='.$pagina.'&';
-
+    $itens_por_pagina = $_POST['itens'];
+    //PEGAR A PÁGINA ATUAL
+    $pagina_pag = intval(@$_POST['pag']);
+    $limite = $pagina_pag * $itens_por_pagina;
+    //CAMINHO DA PAGINAÇÃO
+    $caminho_pag = 'index.php?acao='.$pagina.'&';
 	if($txtbuscar == ''){
-		$res = $pdo->query("SELECT * from medicos order by id desc LIMIT $limite, $itens_por_pagina");
+            $res = $pdo->query("SELECT * from medicos order by id desc LIMIT $limite, $itens_por_pagina");
 	}else{
-		$txtbuscar = '%'.@$_POST['txtbuscar'].'%';
-		$res = $pdo->query("SELECT * from medicos where nome LIKE '$txtbuscar' or crm LIKE '$txtbuscar' order by id desc");
-
+            $txtbuscar = '%'.@$_POST['txtbuscar'].'%';
+            $res = $pdo->query("SELECT * from medicos where nome LIKE '$txtbuscar' or crm LIKE '$txtbuscar' order by id desc");
 	}
-	
-	$dados = $res->fetchAll(PDO::FETCH_ASSOC);
-
-
-	//TOTALIZAR OS REGISTROS PARA PAGINAÇÃO
-		$res_todos = $pdo->query("SELECT * from medicos");
-		$dados_total = $res_todos->fetchAll(PDO::FETCH_ASSOC);
-		$num_total = count($dados_total);
-
-		//DEFINIR O TOTAL DE PAGINAS
-		$num_paginas = ceil($num_total/$itens_por_pagina);
-
-
-	for ($i=0; $i < count($dados); $i++) { 
-			foreach ($dados[$i] as $key => $value) {
-			}
-
-			$id = $dados[$i]['id'];	
-			$nome = $dados[$i]['nome'];
-			$especialidade = $dados[$i]['especialidade'];
-			$crm = $dados[$i]['crm'];
-			$cpf = $dados[$i]['cpf'];
-			$telefone = $dados[$i]['telefone'];
-			$email = $dados[$i]['email'];
-			$turno = $dados[$i]['turno'];
-
-			//BUSCAR O NOME DA ESPECIALIZAÇÃO
-			$res_esp = $pdo->query("SELECT * from especializacoes where id = '$especialidade'");
-			$dados_esp = $res_esp->fetchAll(PDO::FETCH_ASSOC);
-			$nome_esp = $dados_esp[0]['nome'];
-
-
-echo '
+    $dados = $res->fetchAll(PDO::FETCH_ASSOC);
+    //TOTALIZAR OS REGISTROS PARA PAGINAÇÃO
+    $res_todos = $pdo->query("SELECT * from medicos");
+    $dados_total = $res_todos->fetchAll(PDO::FETCH_ASSOC);
+    $num_total = count($dados_total);
+    //DEFINIR O TOTAL DE PAGINAS
+    $num_paginas = ceil($num_total/$itens_por_pagina);
+    for ($i=0; $i < count($dados); $i++) { 
+        foreach ($dados[$i] as $key => $value) {
+        }
+        $id = $dados[$i]['id'];	
+        $nome = $dados[$i]['nome'];
+        $especialidade = $dados[$i]['especialidade'];
+        $crm = $dados[$i]['crm'];
+        $cpf = $dados[$i]['cpf'];
+        $telefone = $dados[$i]['telefone'];
+        $email = $dados[$i]['email'];
+        $turno = $dados[$i]['turno'];
+        //BUSCAR O NOME DA ESPECIALIZAÇÃO
+        echo 'id: '.$especialidade;
+        $res_esp = $pdo->query("SELECT * from especializacoes where id = '$especialidade'");
+        $dados_esp = $res_esp->fetchAll(PDO::FETCH_ASSOC);
+        $nome_esp = $dados_esp[0]['nome'];
+      
+        echo '
 		<tr>
-
-			
-			<td>'.$nome.'</td>
-			<td>'.$nome_esp.'</td>
-			<td>'.$crm.'</td>
-			<td>'.$cpf.'</td>
-			<td>'.$telefone.'</td>
-			<td>'.$turno.'</td>
-			<td>
-				<a href="index.php?acao='.$pagina.'&funcao=editar&id='.$id.'"><i class="fas fa-edit text-info"></i></a>
-				<a href="index.php?acao='.$pagina.'&funcao=excluir&id='.$id.'"><i class="far fa-trash-alt text-danger"></i></a>
-			</td>
+                    <td>'.$nome.'</td>
+                    <td>'.$nome_esp.'</td>
+                    <td>'.$crm.'</td>
+                    <td>'.$cpf.'</td>
+                    <td>'.$telefone.'</td>
+                    <td>'.$turno.'</td>
+                    <td>
+                        <a href="index.php?acao='.$pagina.'&funcao=editar&id='.$id.'"><i class="fas fa-edit text-info"></i></a>
+                        <a href="index.php?acao='.$pagina.'&funcao=excluir&id='.$id.'"><i class="far fa-trash-alt text-danger"></i></a>
+                    </td>
 		</tr>';
-
 	}
-
-echo  '
+        echo '
 	</tbody>
-</table> ';
-
-
+    </table> ';
 if($txtbuscar == ''){
-
-
 echo '
 <!--ÁREA DA PÁGINAÇÃO -->
 <nav class="paginacao" aria-label="Page navigation example">
@@ -116,7 +89,6 @@ echo '
           echo '
              <li class="page-item"><a class="btn btn-outline-dark btn-sm mr-1 '.$estilo.'" href="'.$caminho_pag.'pagina='.$i.'&itens='.$itens_por_pagina.'">'.($i+1).'</a></li>';
            } 
-            
            echo '<li class="page-item">
               <a class="btn btn-outline-dark btn-sm" href="'.$caminho_pag.'pagina='.($num_paginas-1).'&itens='.$itens_por_pagina.'" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
@@ -125,13 +97,6 @@ echo '
             </li>
           </ul>
 </nav>
-
-
-
-
 ';
-
 }
-
-
 ?>

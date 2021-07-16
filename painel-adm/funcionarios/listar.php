@@ -57,7 +57,6 @@ echo '
 
 			$id = $dados[$i]['id'];	
 			$nome = $dados[$i]['nome'];
-			
 			$cpf = $dados[$i]['cpf'];
 			$telefone = $dados[$i]['telefone'];
 			$email = $dados[$i]['email'];
